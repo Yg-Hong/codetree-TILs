@@ -129,24 +129,12 @@ public class Main {
             g.get(v).add(new Edge(u, w));
         }
 
-        // 디버깅 용
-        // System.out.println("그래프 -- ");
-        // for(int i = 0; i < n; i++) {
-        //     System.out.println(g.get(i));
-        // }
-
         changeStart(0);
     }
 
     static private void createItem(int id, int revenue, int dest) {
         itemMap.put(id, new Item(id, revenue, dest));
         itemPq.add(itemMap.get(id));
-
-        // System.out.println("created : itemMap의 크기 ---- " + itemMap.size());
-        // for(Item item : itemPq) {
-        //     System.out.print(item.id + " " + item.cost + " -- ");
-        // }
-        // System.out.println();
     }
 
     static private void changeStart(int s) {
@@ -193,28 +181,39 @@ public class Main {
 
     static private void cancelItem(int id) {
         if(itemMap.get(id) == null) {
-            // System.out.println("cancel failed!!! : NONE ID : itemMap의 크기 ---- " + itemMap.size());
+            // System.out.println("cancel failed!!! : NONE ID :  " + id);
             return;
         }
         itemMap.remove(id);
-        // System.out.println("canceled : itemMap의 크기 ---- " + itemMap.size());
+        // System.out.println("canceled : ID : " + id);
     }
 
     static private void sell() {
+        // System.out.println("sell -------- ");
+        // for(Item item : itemPq) {
+        //     System.out.print(item.id + " " + item.revenue + " - " + costArr[item.dest] + " = " + item.cost + " || ");
+        // }
+        // System.out.println();
+
         if(itemPq.isEmpty()) {
             System.out.println(-1);
             return;
         }
 
         Item item = itemPq.poll();
-        while(item != null && itemMap.get(item.id) == null) {
+        while(!itemPq.isEmpty() && itemMap.get(item.id) == null) {
             item = itemPq.poll();
         }
-        
-        if(itemPq.isEmpty()) {
+        if(itemMap.get(item.id) == null) {
             System.out.println(-1);
             return;
         }
+        
+        // if(itemPq.isEmpty()) {
+        //     System.out.println(-1);
+        //     return;
+        // }
+        
 
         if(item.cost < 0) {
             System.out.println(-1);
