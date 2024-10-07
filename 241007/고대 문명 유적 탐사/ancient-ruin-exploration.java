@@ -60,6 +60,9 @@ public class Main {
             }
             result = chainReact(maxMap);
             maxScore = 0;
+            if(result == 0) {
+                break;
+            }
             sb.append(result).append(" ");
             // System.out.println();
             // for(int[] line : maxMap) {
