@@ -58,9 +58,6 @@ public class Main {
                     }
                 }
             }
-            // for(int[] line: maxMap) {
-            //     System.out.println(Arrays.toString(line));
-            // }
 
             result = chainReact(maxMap);
             maxScore = 0;
@@ -68,9 +65,6 @@ public class Main {
                 break;
             }
             sb.append(result).append(" ");
-            // System.out.println(yyy + "   " + xxx + "   " + ddd);
-            // System.out.println(result + " ----------- ");
-            // System.out.println();
         }
         System.out.println(sb);
     }
@@ -190,12 +184,10 @@ public class Main {
         for(int x = 0; x < 5; x++) {
             for(int y = 4; y >= 0; y--) {
                 if(maxMap[y][x] == 0) {
-                    // System.out.print(pieceArr[pieceIdx] + " "); 
                     maxMap[y][x] = pieceArr[pieceIdx++];
                 }
             }
         }
-        // System.out.println();
 
         map = maxMap;
     }
@@ -207,15 +199,11 @@ public class Main {
             flag = false;
 
             int value = getItem(maxMap);
-            // System.out.println("연쇄 작용 !!! - " + value);
             
             total += value;
             if(value != 0) {
                 flag = true;
             }
-            // for(int[] line: maxMap) {
-            //     System.out.println(Arrays.toString(line));
-            // }
             init(maxMap);
         }
         return total;
