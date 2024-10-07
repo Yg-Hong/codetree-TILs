@@ -43,8 +43,8 @@ public class Main {
             // 회전각 0:90도, 1: 180도, 2: 270도
             for(int angle = 2; angle >= 0; angle--) {
                 // 우선순위 때문에 순서 거꾸로
-                for(int y = 3; y >= 1; y--) {
-                    for(int x = 3; x >= 1; x--) {
+                for(int x = 3; x >= 1; x--) {
+                    for(int y = 3; y >= 1; y--) {
                         int[][] temp = spin(y, x, angle);
                         int score = getItem(temp);
                         // score가 지금까지 최솟값보다 같거나 크다면 temp, maxScore 기억
@@ -58,19 +58,19 @@ public class Main {
                     }
                 }
             }
+            // for(int[] line: maxMap) {
+            //     System.out.println(Arrays.toString(line));
+            // }
+
             result = chainReact(maxMap);
             maxScore = 0;
             if(result == 0) {
                 break;
             }
             sb.append(result).append(" ");
-            // System.out.println();
-            // for(int[] line : maxMap) {
-            //     System.out.println(Arrays.toString(line));
-            // }
-            // System.out.println(maxScore);
             // System.out.println(yyy + "   " + xxx + "   " + ddd);
             // System.out.println(result + " ----------- ");
+            // System.out.println();
         }
         System.out.println(sb);
     }
@@ -126,10 +126,6 @@ public class Main {
             nowX = nextX;
         }
 
-        // for(int[] line: temp) {
-        //     System.out.println(Arrays.toString(line));
-        // }
-
         return temp;
     }
 
@@ -180,7 +176,7 @@ public class Main {
         }
 
         int result = q2.size(); 
-        if(q2.size() >= 3) {
+        if(result >= 3) {
             while(!q2.isEmpty()) {
                 int[] now = q2.poll();
                 temp[now[0]][now[1]] = 0;
@@ -192,13 +188,14 @@ public class Main {
 
     static private void init(int[][] maxMap) {
         for(int x = 0; x < 5; x++) {
-            for(int y = 4; y >=0; y--) {
+            for(int y = 4; y >= 0; y--) {
                 if(maxMap[y][x] == 0) {
-                    maxMap[y][x] = pieceArr[pieceIdx]; 
-                    pieceIdx = (pieceIdx + 1) % M;
+                    // System.out.print(pieceArr[pieceIdx] + " "); 
+                    maxMap[y][x] = pieceArr[pieceIdx++];
                 }
             }
         }
+        // System.out.println();
 
         map = maxMap;
     }
@@ -211,10 +208,14 @@ public class Main {
 
             int value = getItem(maxMap);
             // System.out.println("연쇄 작용 !!! - " + value);
+            
             total += value;
             if(value != 0) {
                 flag = true;
             }
+            // for(int[] line: maxMap) {
+            //     System.out.println(Arrays.toString(line));
+            // }
             init(maxMap);
         }
         return total;
