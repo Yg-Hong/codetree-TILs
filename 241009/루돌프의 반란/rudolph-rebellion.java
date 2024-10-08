@@ -69,25 +69,9 @@ public class Main {
         while(flag && m++ < M) {
             move_dear();
 
-            // for(int[] line : map) {
-            //     System.out.println(Arrays.toString(line));
-            // }
-            // System.out.println();
-
             move_santa();
-            
-            // for(int[] line : map) {
-            //     System.out.println(Arrays.toString(line));
-            // }
-            // System.out.println();
 
             flag = adjustment();
-            // for(int Pn : santaArr) {
-            //     Santa santa = santaMap.get(Pn);
-
-            //     System.out.print(santa.score + " ");
-            // }
-            // System.out.println();
         }
 
         StringBuilder sb = new StringBuilder();
@@ -101,7 +85,6 @@ public class Main {
     }
 
     static void move_dear() {
-        // Santa min_dist_santa = santaMap.get(santaArr.get(0));
         Santa min_dist_santa = new Santa(-1, -1); // 아무값이나 초기화
         int min_dist = Integer.MAX_VALUE;
 
@@ -122,7 +105,7 @@ public class Main {
                 min_dist_santa = santa;
             }
         }
-        // System.out.println("현재 루돌프와 가장 가까운 산타는 " + min_dist_santa.r + ", " + min_dist_santa.c + "에 위치");
+        
         min_dist = Integer.MAX_VALUE;
         int min_direction = -1;
         int nextR = 0, nextC = 0;
@@ -145,13 +128,11 @@ public class Main {
         map[Rr][Rc] = 0;
         nextR = Rr + dr_dear[min_direction];
         nextC = Rc + dc_dear[min_direction];
-        // System.out.println("루돌프 " + nextR + ", " + nextC + "로 이동");
 
         // 산타와 충돌 시
         if(map[nextR][nextC] > 0) {
             // 루돌프가 밀고 들어온 방향으로 C 밀려나는 'map[nextR][nextC]'번 산타
             int Pn = map[nextR][nextC];
-            // System.out.println("날벼락!!!!! 루돌프의 이동으로 " + Pn + "번 산타 루돌프와 충돌!!!!");
 
             // 산타 튕겨나감
             Santa santa = santaMap.get(Pn);
@@ -191,7 +172,6 @@ public class Main {
             }
 
             if(santa.stunned >= m) {
-                // System.out.println(Pn + "번 산타는 "+ santa.r + " " + santa.c + "에서 아파서 기절!");
                 continue;
             }
 
@@ -211,7 +191,6 @@ public class Main {
                 }
 
                 int dist = getDistance(nextR, Rr, nextC, Rc);
-                // System.out.println(Pn + "번 산타 " + dist + " " + nextR + " " + nextC);
                 if(min_dist > dist) {
                     min_dist = dist;
                     min_direction = d;
@@ -219,8 +198,6 @@ public class Main {
             }
 
             if(min_direction == -1) {
-                // System.out.println(min_dist);
-                // System.out.println(Pn + "번 산타 " + santa.r + ", " + santa.c + "에서 못움직임!!");
                 continue;
             }
 
@@ -228,7 +205,6 @@ public class Main {
             map[santa.r][santa.c] = 0;
             nextR = santa.r + dr_santa[min_direction];
             nextC = santa.c + dc_santa[min_direction];
-            // System.out.println(Pn + "번 산타 " + nextR + ", " + nextC + "로 이동");
 
             // 루돌프와 충돌하면
             if(map[nextR][nextC] == -1) {
@@ -238,7 +214,6 @@ public class Main {
                 int opposite_direction = (min_direction + 2) % 4;
                 nextR += dr_santa[opposite_direction] * D;
                 nextC += dc_santa[opposite_direction] * D;
-                // System.out.println("쵸비상!!!! " + Pn + "번 산타 " + nextR + ", " + nextC + "로 이동");
                 
                 // 다음 라운드까지 santa 기절
                 santa.stunned = m + 1;
@@ -261,8 +236,6 @@ public class Main {
     static private void interaction(int Pn, int nextR, int nextC, int dr, int dc) {
         // 맵 밖일 때
         if(nextR < 0 || nextR >= N || nextC < 0 || nextC >= N) {
-            // System.out.println(Pn + "번 산타 아웃!!");
-            // System.out.println(Pn +"번 산타 총 점수 " + santaMap.get(Pn).score + "로 경기 마무리!!!");
             Santa santa = santaMap.get(Pn);
             santa.out = true;
 
@@ -274,13 +247,11 @@ public class Main {
             Santa santa = santaMap.get(Pn);
             santa.r = nextR;
             santa.c = nextC;
-            // System.out.println("<>상호작용!!!! " + Pn + "번 산타 " + santa.r + ", " + santa.c + "로 이동");
+            
             return;
         }
 
         int nextPn = map[nextR][nextC];
-        
-        // System.out.println("상호작용!!!! " + Pn + "번 산타 " + nextR + ", " + nextC + "로 이동");
 
         interaction(nextPn, nextR + dr, nextC + dc, dr, dc);
 
