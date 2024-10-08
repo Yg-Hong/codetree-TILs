@@ -111,6 +111,7 @@ public class Main {
             // 손님이 앉았을 때 초밥 위치
             int sushiPosWhenSit = (now.x + (customer.t - now.t)) % L;
             int sushiWhenSit = now.x + (customer.t - now.t);
+            // 손님이 먼저 앉았을 때,
             if (customer.t - now.t <= 0) {
                 sushiPosWhenSit = now.x;
                 sushiWhenSit = 0;
@@ -148,7 +149,7 @@ public class Main {
 
         belt.addAll(temp);
         // System.out.println(customerMap.size() + " " + belt.size());
-        sb.append(customerMap.size()).append(" ").append(belt.size()).append("\n");
+        // sb.append(customerMap.size()).append(" ").append(belt.size()).append("\n");
     }
 
     static private void eat(Customer customer) {
