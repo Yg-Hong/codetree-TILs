@@ -137,19 +137,13 @@ public class Main {
                 continue;
             }
 
-            // 단 한 바퀴 돌았을 떈 무조건 먹은 것
-            // else if(now.x + now.t >= L) {
-            //     eat(customer);
-            //     continue;
-            // }
-            
             // 조건에 안맞았으면 다시 넣어야함.
             temp.add(now);
         }
 
         belt.addAll(temp);
         // System.out.println(customerMap.size() + " " + belt.size());
-        // sb.append(customerMap.size()).append(" ").append(belt.size()).append("\n");
+        sb.append(customerMap.size()).append(" ").append(belt.size()).append("\n");
     }
 
     static private void eat(Customer customer) {
