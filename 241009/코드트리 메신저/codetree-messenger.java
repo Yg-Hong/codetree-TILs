@@ -64,11 +64,11 @@ public class Main {
                 case 500: 
                     c1 = Integer.parseInt(st.nextToken());
                     int count = getArlam(c1);
-                    System.out.println(count);
-                    // sb.append(count).append("\n");
+                    // System.out.println(count);
+                    sb.append(count).append("\n");
             }
         }
-        // System.out.println(sb);
+        System.out.println(sb);
     }
 
     static private void init(StringTokenizer st) {
