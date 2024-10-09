@@ -10,6 +10,10 @@ public class Main {
         int parentId;
         Node parent;
 
+        // 현재 노드가 전달할 수 있는 알람 수
+        // arrOfArlam[3] = 4 라면 위로 3개의 노드에 전달할 수 있는 알람이 4
+        int[] arrOfArlam = new int[21];
+
         Node rightChild;
         int rightMaxAuthority;
 
@@ -77,6 +81,7 @@ public class Main {
     static private void init(StringTokenizer st) {
         // root 생성
         nodeMap.put(0, new Node(0, 0, -1));
+        Node root = nodeMap.get(0);
 
         // 다른 노드 생성만
         for(int i= 1; i <= N; i++) {
@@ -110,12 +115,72 @@ public class Main {
             Node node = nodeMap.get(i);
             node.authority = authority;
         }
+
+        // ArrOfArlam 초기화
+        alramInit(root);
+        
+        // printAll();
+    }
+    
+    static private void alramInit(Node now) {
+        if(now == null) {
+            return;
+        }
+
+        now.arrOfArlam = new int[21];
+
+        if(!now.alram) {
+            return;
+        }
+
+        for(int i = 0; i <= now.authority; i++) {
+            now.arrOfArlam[i]++;
+        }
+        
+        alramInit(now.leftChild);
+        alramInit(now.rightChild);
+
+        if(now.leftChild != null) {
+            // lefChilde의 n(1~20)번 알람 수가 현재 노드의 n - 1번 알람 수값에 반영
+            for(int i = 1; i <= 20; i++) {
+                now.arrOfArlam[i - 1] += now.leftChild.arrOfArlam[i];
+            }
+        }
+
+        if(now.rightChild != null) {
+            for(int i = 1; i <= 20; i++) {
+                now.arrOfArlam[i - 1] += now.rightChild.arrOfArlam[i];
+            }
+        }
+
+    }
+
+    static private void reload() {
+        alramInit(nodeMap.get(0));
+
+        for(int i = 1; i <= N; i++) {
+            Node node = nodeMap.get(i);
+
+            if(!node.alram) {
+                alramInit(node.leftChild);
+                alramInit(node.rightChild);
+                node.arrOfArlam[0] = 1;
+                if(node.leftChild != null) {
+                    node.arrOfArlam[0] += node.leftChild.arrOfArlam[1];
+                }
+                if(node.rightChild != null) {
+                    node.arrOfArlam[0] += node.rightChild.arrOfArlam[1];
+                }
+            }
+        }
     }
 
     static private void turn_alram(int c) {
         Node node = nodeMap.get(c);
         node.alram = !node.alram;
 
+        reload();
+        // printAll();
         // 디버깅
         // System.out.println(node.id + "번 노드 알림 " + !node.alram + "에서 " + node.alram + "으로 변경");
     }
@@ -123,8 +188,10 @@ public class Main {
     static private void change_authority(int c, int power) {
         Node node = nodeMap.get(c);
 
-        // System.out.println(node.id + "번 노드 권한세기 " + node.authority + "에서 " + power + "로 변경");
         node.authority = power;
+
+        reload();
+        // printAll();
     }
 
     static private void change_parent(int c1, int c2) {
@@ -154,99 +221,25 @@ public class Main {
         }
         node1.parentId = parent2.id;
         node1.parent = parent2;
+
+        reload();
+        // printAll();
     }
 
     static private void printAll() {
         for(int i = 1; i <= N; i++) {
             Node node = nodeMap.get(i);
             System.out.println(i + "번 노드의 부모 노드는 " + node.parent.id + " || 권한은 " + node.authority + " || 현재 알람 상태는 " + node.alram);
-            System.out.println(node.leftChild == null ? "null" : node.leftChild.id);
-            System.out.println(node.rightChild == null ? "null" : node.rightChild.id);
+            System.out.println("현재 받을 수 있는 알람 수는 ? " + node.arrOfArlam[0]);
+            // System.out.println(node.leftChild == null ? "null" : node.leftChild.id);
+            // System.out.println(node.rightChild == null ? "null" : node.rightChild.id);
         }
     }
 
     static private int getArlam(int c) {
-        // 트리 순회 & 백트래킹
-        Node now = nodeMap.get(c);
+        // dp
+        Node node = nodeMap.get(c);
 
-        // int left = 0;
-        // int right = 0;
-        // if(now.leftChild != null) {
-        //     left = traversal(now.leftChild, 1);
-        // } 
-        
-        // if(now.rightChild != null) {
-        //     right = traversal(now.rightChild, 1);
-        // }
-
-        int result = traversal2(now);
-        // System.out.println(result);
-        // System.out.println(now.id + "번 노드의 왼쪽에서 " + left + "개의 알람, 오른쪽에서 " + right + "개의 알람");
-        
-        // return left + right;
-        return result;
-    }
-
-    static private int traversal(Node now, int depth) {
-        // 현재 노드 알림이 꺼져있으면 이 상위 노드로는 알람이 안감
-        if(!now.alram) {
-            return 0;
-        }
-        
-        int result = 0;  
-        // c1 노드로부터 뎁스와 authority를 비교해서 본인의 알람이 전달되는지 확인
-        if(depth <= now.authority) {
-            result++;
-        }
-
-        // general case
-        int left = 0;
-        int right = 0;
-        if(now.leftChild != null) {
-            left = traversal(now.leftChild, depth + 1);
-        }
-        
-        if(now.rightChild != null) {
-            right = traversal(now.rightChild, depth + 1);
-        }
-
-        return result + left + right;
-    }
-
-    static private int traversal2(Node node) {
-        Queue<Node> q = new ArrayDeque<>();
-        Queue<Node> q2 = new ArrayDeque<>();
-
-        q.add(node);
-        int result = 0;
-        int depth = 1;
-        while(!q.isEmpty()) {
-            Node now = q.poll();
-            if(now.leftChild != null) {
-                if(now.leftChild.alram) {
-                    q2.add(now.leftChild);
-                    if(now.leftChild.authority >= depth) {
-                        result++;
-                    }
-                }
-            }
-
-            if(now.rightChild != null) {
-                if(now.rightChild.alram) {
-                    q2.add(now.rightChild);
-                    if(now.rightChild.authority >= depth) {
-                        result++;
-                    }
-                }
-            }
-
-            if(q.isEmpty() && !q2.isEmpty()) {
-                q = q2;
-                q2 = new ArrayDeque<>();
-                depth++;
-            }
-        }
-
-        return result;
+        return node.arrOfArlam[0] - 1;
     }
 }
