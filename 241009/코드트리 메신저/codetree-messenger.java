@@ -11,7 +11,10 @@ public class Main {
         Node parent;
 
         Node rightChild;
+        int rightMaxAuthority;
+
         Node leftChild;
+        int leftMaxAuthority;
 
         Node(int id, int authority, int parentId) {
             this.id = id;
@@ -166,19 +169,22 @@ public class Main {
         // 트리 순회 & 백트래킹
         Node now = nodeMap.get(c);
 
-        int left = 0;
-        int right = 0;
-        if(now.leftChild != null) {
-            left = traversal(now.leftChild, 1);
-        } 
+        // int left = 0;
+        // int right = 0;
+        // if(now.leftChild != null) {
+        //     left = traversal(now.leftChild, 1);
+        // } 
         
-        if(now.rightChild != null) {
-            right = traversal(now.rightChild, 1);
-        }
+        // if(now.rightChild != null) {
+        //     right = traversal(now.rightChild, 1);
+        // }
 
+        int result = traversal2(now);
+        // System.out.println(result);
         // System.out.println(now.id + "번 노드의 왼쪽에서 " + left + "개의 알람, 오른쪽에서 " + right + "개의 알람");
         
-        return left + right;
+        // return left + right;
+        return result;
     }
 
     static private int traversal(Node now, int depth) {
@@ -205,5 +211,42 @@ public class Main {
         }
 
         return result + left + right;
+    }
+
+    static private int traversal2(Node node) {
+        Queue<Node> q = new ArrayDeque<>();
+        Queue<Node> q2 = new ArrayDeque<>();
+
+        q.add(node);
+        int result = 0;
+        int depth = 1;
+        while(!q.isEmpty()) {
+            Node now = q.poll();
+            if(now.leftChild != null) {
+                if(now.leftChild.alram) {
+                    q2.add(now.leftChild);
+                    if(now.leftChild.authority >= depth) {
+                        result++;
+                    }
+                }
+            }
+
+            if(now.rightChild != null) {
+                if(now.rightChild.alram) {
+                    q2.add(now.rightChild);
+                    if(now.rightChild.authority >= depth) {
+                        result++;
+                    }
+                }
+            }
+
+            if(q.isEmpty() && !q2.isEmpty()) {
+                q = q2;
+                q2 = new ArrayDeque<>();
+                depth++;
+            }
+        }
+
+        return result;
     }
 }
