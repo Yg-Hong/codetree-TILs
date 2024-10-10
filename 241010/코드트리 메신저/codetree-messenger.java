@@ -156,14 +156,7 @@ public class Main {
     static private void recal(int id) {
         Node now = nodeMap.get(id);
 
-        // node부터 root까지 거슬러 올라가면서 arrOfAlram 재계산
-        // Node now = node;
-        // Arrays.fill(now.arrOfAlram, 0);
-        // for(int i = 0; i <= now.authority; i++) {
-        //     now.arrOfAlram[i]++;
-        // }
-
-        while(now.id != 0) {
+        while(now != null && now.id != 0) {
             Arrays.fill(now.arrOfAlram, 0);
             for(int i = 0; i <= now.authority; i++) {
                 now.arrOfAlram[i]++;
