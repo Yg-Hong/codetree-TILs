@@ -73,8 +73,8 @@ public class Main {
                 case 500: 
                     c1 = Integer.parseInt(st.nextToken());
                     int count = getArlam(c1);
-                    System.out.println(count);
-                    // sb.append(count).append("\n");
+                    // System.out.println(count);
+                    sb.append(count).append("\n");
             }
         }
         System.out.println(sb);
@@ -120,8 +120,6 @@ public class Main {
 
         // ArrOfArlam 초기화
         alramInit(root);
-        
-        // printAll();
     }
     
     static private void alramInit(Node now) {
@@ -130,15 +128,13 @@ public class Main {
         }
 
         now.arrOfAlram = new int[21];
-
-        for(int i = 0; i <= now.authority; i++) {
+        for(int i = 0; i <= now.authority && i <= 20; i++) {
             now.arrOfAlram[i]++;
         }
         
         alramInit(now.leftChild);
         alramInit(now.rightChild);
         
-
         if(now.leftChild != null) {
             // lefChilde의 n(1~20)번 알람 수가 현재 노드의 n - 1번 알람 수값에 반영
             for(int i = 1; i <= 20; i++) {
@@ -237,7 +233,6 @@ public class Main {
     }
 
     static private int getArlam(int c) {
-        // dp
         Node node = nodeMap.get(c);
 
         return node.arrOfAlram[0] - 1;
