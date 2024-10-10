@@ -154,13 +154,13 @@ public class Main {
 
         while(now != null && now.id != 0) {
             Arrays.fill(now.arrOfAlram, 0);
-            for(int i = 0; i <= now.authority; i++) {
+            for(int i = 0; i <= now.authority && i <= 20; i++) {
                 now.arrOfAlram[i]++;
             }
 
             if(now.leftChild != null && now.leftChild.alram) {
             // leftChild의 n(1~20)번 알람 수가 현재 노드의 n - 1번 알람 수값에 반영
-                for(int i = 1; i <= 20; i++) {
+                for(int i = 1; i <= 20 ; i++) {
                     now.arrOfAlram[i - 1] += now.leftChild.arrOfAlram[i];
                 }
             }
